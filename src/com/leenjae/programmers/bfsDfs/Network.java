@@ -54,4 +54,36 @@ public class Network {
         }
         return answer;
     }
+
+    public int solution2(int n, int[][] computers) {
+        int answer = 0;
+
+        // 1 visited[] 로 해당 computer 가 이미 체크 된지 확인
+        // 2 해당 컴퓨터와 연결되어있는 computer 들 모두 queue에 추가
+        // 3 queue에서 꺼내 2번작업
+        // 4 queue작업이 끝나면 visited를 돌면서 아직 visited안한 것으로 다시 2번
+
+        boolean visited[] = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (visited[i]) continue;
+            bfs(n, i, computers, visited);
+            answer++;
+        }
+
+        return answer;
+    }
+
+    void bfs(int size, int start, int[][] computers, boolean[] visited) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        visited[start] = true;
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            for (int next = 0; next < size; next++) {
+                if (computers[cur][next] == 0 || visited[next]) continue;
+                queue.add(next);
+                visited[next] = true;
+            }
+        }
+    }
 }

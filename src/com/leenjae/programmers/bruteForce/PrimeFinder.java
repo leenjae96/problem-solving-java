@@ -37,15 +37,14 @@ public class PrimeFinder {
         boolean[] primeSet = initPrimeSet(max);
         //조합수 중 primeSet에 있는 것들만 count 해서 리턴.
         return (int) combinedNumbers.stream()
-                .filter(number->primeSet[number])
+                .filter(number -> primeSet[number])
                 .count();
     }
 
     List<String> combine(int length, List<String> papers) {
         if (length == 0) { //길이가 0이면 빈 리스트
             return Collections.emptyList();
-        }
-        else if (length == 1) { //길이가 1이면 받은 리스트를 그대로 return
+        } else if (length == 1) { //길이가 1이면 받은 리스트를 그대로 return
             return new ArrayList<>(papers);
         } else { //길이가 1보다 크면 순회하면서 1개씩뽑고 남은 리스트를 다시 combine(length-1, copy)
             List<String> combinedList = new ArrayList<>();
@@ -53,9 +52,11 @@ public class PrimeFinder {
                 List<String> copy = new ArrayList<>(papers);
                 String prefix = copy.get(i);
                 copy.remove(i);
-                combine(length - 1, copy).stream()
+                combinedList.addAll(combine(length - 1, copy)
+                        .stream()
                         .map(number -> prefix + number)
-                        .forEach(combinedList::add);
+                        .collect(Collectors.toList())
+                );
             }
             return combinedList;
         }
