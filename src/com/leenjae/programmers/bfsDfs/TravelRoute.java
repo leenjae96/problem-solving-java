@@ -1,9 +1,6 @@
 package com.leenjae.programmers.bfsDfs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 프로그래머스 - 깊이/너비 우선탐색 - level3
@@ -13,29 +10,45 @@ import java.util.Map;
  * @date 25.11.14
  */
 public class TravelRoute {
-    //아래는 여행최단경로
-    Map<String, List<String>> airport = new HashMap<>();
+    int SIZE;
+    boolean VISITED[];
+    String[][] TICKETS;
+
+    List<String> ANSWERLIST;
+
     public String[] solution(String[][] tickets) {
-        int length = tickets.length;
-        for(String[] ticket : tickets) {
-            String from = ticket[0];
-            String to = ticket[1];
+        SIZE = tickets.length;
+        VISITED = new boolean[SIZE + 1];
+        ANSWERLIST = new ArrayList<>();
+        Arrays.sort(tickets, Comparator.comparing(o -> o[1]));
 
-            List<String> destinations = airport.get(from);
-            if(destinations == null) {
-                destinations = new ArrayList<>();
-                airport.put(to, destinations);
-            }
-            destinations.add(to);
-        }
+        TICKETS = tickets;
 
-
-
-        String[] answer = {};
-        return answer;
+        List<String> path = new ArrayList<>();
+        path.add("ICN");
+        dfs("ICN", path);
+        return ANSWERLIST.toArray(new String[SIZE]);
     }
 
-    void dfs(String before, String now, Map<String, List<String>> airport) {
+    void dfs(String from, List<String> path) {
+        if (!ANSWERLIST.isEmpty()) {
+            return;
+        }
+        if (path.size() == SIZE + 1) {
+            ANSWERLIST.addAll(path);
+        }
 
+        for (int i = 0; i < SIZE; i++) {
+            if (VISITED[i] || !TICKETS[i][0].equals(from)) {
+                continue;
+            }
+            path.add(TICKETS[i][1]);
+            VISITED[i] = true;
+
+            dfs(TICKETS[i][1], path);
+
+            path.remove(path.size() - 1);
+            VISITED[i] = false;
+        }
     }
 }

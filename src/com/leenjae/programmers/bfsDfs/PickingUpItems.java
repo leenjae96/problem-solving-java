@@ -4,76 +4,86 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class PickingUpItems {
-    boolean[][] VISITED = new boolean[101][101];
-    int[][] MAP = new int[101][101];
-
     public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
-        int answer = 0;
+        //주의!! 모든것을 double size로 계산한다.
+        //rectangle 갯수만큼 순회하며 map 을 그린다. 1길 2사각형내부
+        int[][] map = drawMap(rectangle);
+        //map에서 character 위치로부터 item위치까지 bfs.
+        return bfs(map, characterX, characterY, itemX, itemY);
+    }
 
-        for (int[] rectInfo : rectangle) {
-            int minX = rectInfo[0] * 2;
-            int minY = rectInfo[1] * 2;
-            int maxX = rectInfo[2] * 2;
-            int maxY = rectInfo[3] * 2;
+    int[][] drawMap(int[][] rectangle) {
+        int[][] map = new int[101][101];
+        for (int[] one : rectangle) {
+            int row1 = one[0] * 2;
+            int col1 = one[1] * 2;
+            int row2 = one[2] * 2;
+            int col2 = one[3] * 2;
 
-            //MAP 0 초기화x
-            //MAP 1 길, 테두리
-            //MAP -1 구멍
-            for (int x = minX; x <= maxX; x++) {
-                for (int y = minY; y <= maxY; y++) {
-                    if (MAP[x][y] == -1) continue;
-
-                    if (x == minX || x == maxX || y == minY || y == maxY) {
-                        MAP[x][y] = 1;
-                    } else {
-                        MAP[x][y] = -1;
+            for (int r = row1; r <= row2; r++) {
+                for (int c = col1; c <= col2; c++) {
+                    //테두리일때
+                    if (r == row1 || r == row2 || c == col1 || c == col2) {
+                        if (map[r][c] == 2) {
+                            continue;
+                        }
+                        map[r][c] = 1;
+                    }
+                    //테두리 내부일때
+                    else {
+                        map[r][c] = 2;
                     }
                 }
             }
         }
-
-        PositionNode positionNode = new PositionNode(characterX * 2, characterY * 2, 0);
-
-        Queue<PositionNode> queue = new LinkedList<>();
-        VISITED[positionNode.x][positionNode.y] = true;
-        findNextAndAddToQueue(positionNode, queue);
-        while (!queue.isEmpty()) {
-            PositionNode pollingNode = queue.poll();
-            if (pollingNode.x == itemX * 2 && pollingNode.y == itemY * 2) {
-                answer = pollingNode.depth / 2;
-                break;
-            }
-            VISITED[pollingNode.x][pollingNode.y] = true;
-            findNextAndAddToQueue(pollingNode, queue);
-        }
-
-        return answer;
+        return map;
     }
 
-    void findNextAndAddToQueue(PositionNode node, Queue<PositionNode> queue) {
-        int x = node.x;
-        int y = node.y;
-        int depth = node.depth;
-        int[] dx = {-1, 0, 1, 0};
-        int[] dy = {0, -1, 0, 1};
+    int bfs(int[][] map, int characterX, int characterY, int itemX, int itemY) {
+        int answer = 0;
 
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (nx < 1 || ny < 1 || nx > 100 || ny > 100) continue;
-            if (VISITED[nx][ny] || MAP[nx][ny] != 1) continue;
-            queue.add(new PositionNode(nx, ny, depth + 1));
+        characterX *= 2;
+        characterY *= 2;
+        itemX *= 2;
+        itemY *= 2;
+
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+        boolean[][] visited = new boolean[101][101];
+
+        Queue<Position> queue = new LinkedList<>();
+        queue.add(new Position(characterX, characterY, 0));
+        visited[characterX][characterY] = true;
+        while (!queue.isEmpty()) {
+            Position cur = queue.poll();
+            if(cur.x == itemX && cur.y == itemY) {
+                answer = cur.moveCount/2;
+                break;
+            }
+            for (int i = 0; i < 4; i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+                if ((nx < 2 || nx > 100 || ny < 2 || ny > 100) ||
+                        (visited[nx][ny] || map[nx][ny] != 1)) {
+                    continue;
+                }
+
+                queue.add(new Position(nx, ny, cur.moveCount+1));
+                visited[nx][ny] = true;
+            }
         }
+        return answer;
     }
 }
 
-class PositionNode {
-    int x, y;
-    int depth;
+class Position {
+    int x;
+    int y;
+    int moveCount;
 
-    PositionNode(int x, int y, int depth) {
+    Position(int x, int y, int moveCount) {
         this.x = x;
         this.y = y;
-        this.depth = depth;
+        this.moveCount = moveCount;
     }
 }
