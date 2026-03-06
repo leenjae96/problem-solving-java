@@ -7,6 +7,41 @@ import java.util.Arrays;
  * 입국심사
  *
  * @author leenjae96
+ * @date 26.03.06
+ */
+class Solution2 {
+    public long solution(int n, int[] times) {
+        // times 정렬
+        Arrays.sort(times);
+        // answer최댓값 세팅 .. max * n;
+        long front = times[0];
+        long rear = (long) times[times.length - 1] * n + 1;
+        // answer(시간) 기준 binarySearch.
+        while(front < rear) {
+            // - mid 내에 사람들을 다 뺄 수 있는가?
+            long mid = (front + rear)/2;
+            long count = 0;
+            for(int time : times) {
+                if(mid < time) {
+                    break;
+                }
+                count += (mid / time);
+            }
+
+            if(count < n) {
+                front = mid+1;
+            } else {
+                rear = mid;
+            }
+        }
+        return rear;
+    }
+}
+
+
+
+/**
+ * @author leenjae96
  * @date 25.12.12
  */
 public class Immigration {
