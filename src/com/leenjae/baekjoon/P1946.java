@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /**
- * 백준 - 실버1
- * 신입 사원
- * 그리디
+ * 백준 - 신입 사원- 실버1(그리디)
  *
  * @author leenjae96
  * @date 26.03.25

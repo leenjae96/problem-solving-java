@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * 백준 - 골드5
+ * 백준 - 골드5(그리디)
  * 배
- * 그리디
  *
  * @author leenjae96
  * @date 26.03.19

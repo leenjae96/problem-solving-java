@@ -6,9 +6,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 /**
- * 백준 - 골드4
+ * 백준 - 골드4 (그리디)
  * 강의실 배정
- * 그리디
  *
  * @author leenjae96
  * @date 26.03.24

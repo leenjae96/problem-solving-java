@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
- * 백준 - 실버4
+ * 백준 - 실버4(그리디)
  * 보물
- * 그리디
+ *
  *
  * @author leenjae96
  * @date 26.03.19

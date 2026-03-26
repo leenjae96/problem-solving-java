@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 백준 - 브론즈3
+ * 백준 - 브론즈3(그리디)
  * 세탁소 사장 동혁
- * 그리디
  *
  * @author leenjae96
  * @date 26.03.25
